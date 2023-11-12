@@ -41,7 +41,9 @@ class Post(BaseModel):
     objects = PostManager()
 
     token = models.OneToOneField(PostToken, on_delete=models.CASCADE)
+    token_code = models.CharField(max_length=16, null=True, blank=True)
     city_rel = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True)
+    city_name = models.CharField(max_length=255, null=True, blank=True)
 
     image_count = models.IntegerField(null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
@@ -54,7 +56,6 @@ class Post(BaseModel):
     label_color = models.CharField(max_length=255, null=True, blank=True)
     is_checked = models.CharField(max_length=255, null=True, blank=True)
     has_chat = models.CharField(max_length=255, null=True, blank=True)
-    city_name = models.CharField(max_length=255, null=True, blank=True)
     district_persian = models.CharField(max_length=255, null=True, blank=True)
     city_persian = models.CharField(max_length=255, null=True, blank=True)
     category_slug_persian = models.CharField(max_length=255, null=True, blank=True)
@@ -96,6 +97,15 @@ class Post(BaseModel):
     not_balcony = models.CharField(max_length=255, null=True, blank=True)
     check_cost_limit = models.CharField(max_length=255, null=True, blank=True)
     pricing_cost = models.CharField(max_length=255, null=True, blank=True)
+    meter = models.CharField(max_length=32, null=True, blank=True)
+    rooms = models.CharField(max_length=32, null=True, blank=True)
+    floor = models.CharField(max_length=32, null=True, blank=True)
+    total_price = models.CharField(max_length=32, null=True, blank=True)
+    price_per_meter = models.CharField(max_length=32, null=True, blank=True)
+    real_state_agency = models.CharField(max_length=32, null=True, blank=True)
+    real_state_agent = models.CharField(max_length=32, null=True, blank=True)
+    year = models.CharField(max_length=32, null=True, blank=True)
+    land_meter = models.CharField(max_length=32, null=True, blank=True)
 
     def __str__(self):
         return f"{self.__class__}: {self.token}"
@@ -103,6 +113,7 @@ class Post(BaseModel):
     @classmethod
     def columns_name(cls):
         return {
+            'token_code': 'token_code',
             'brand_model': 'brand_model',
             'business_ref': 'business_ref',
             'business_type': 'business_type',
@@ -157,5 +168,13 @@ class Post(BaseModel):
             'not_balcony': 'بالکن ندارد',
             'check_cost_limit': 'حدود هزینه کارشناسی',
             'pricing_cost': 'هزینه قیمت‌گذاری',
-
+            'meter': 'متراژ',
+            'land_meter': 'متراژ زمین',
+            'rooms': 'اتاق',
+            'floor': 'طبقه',
+            'total_price': 'قیمت کل',
+            'price_per_meter': 'قیمت هر متر',
+            'real_state_agency': 'آژانس املاک',
+            'real_state_agent': 'مشاور املاک',
+            'year': 'ساخت',
         }

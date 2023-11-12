@@ -9,7 +9,10 @@ class Admin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 class PostAdmin(Admin):
-    list_display = ['token', 'city', 'title', 'price']
+    list_display = ['token', 'city', 'title', 'price', 'has_map']
+
+    def has_map(self, obj):
+        return obj.latitude is not None
 
 
 class PostTokenAdmin(Admin):

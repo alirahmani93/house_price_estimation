@@ -188,11 +188,6 @@ class Crawler:
             self._token = token
             url = self._make_detail_url(token.code)
             print(f'POST DETAIL URL: {url}')
-            # r = requests.get(url)
-            # if r.status_code != 200:
-            #     self.logger.error(f'status_code:{r.status_code},token: {token}')
-            #     break
-            # data = r.json()
             data = self._send_request(
                 url=url,
                 callback_func=partial(self._callback_func_token_detail, token=token.code))
@@ -200,11 +195,13 @@ class Crawler:
                 continue
             self._get_one_token_detail(data)
             self.post_detail_count += 1
+            print('********' * 5)
+
             # break
         return self.post_detail_count
 
     def _get_one_token_detail(self, data: dict) -> dict:
-        self.post_data = {}
+        self.post_data = {'city_name': 'tehran', 'token_code': self._token.code}
         for key in self.normal_fields.keys():
             for item in self.normal_fields[key]:
                 self.post_data[item] = self._get_item(data.get(key), item)
@@ -230,6 +227,9 @@ class Crawler:
         for k, v in self.post_data.items():
             if hasattr(Post, k):
                 pre_pare_data[k] = v
+        diff_ = len(pre_pare_data) - len(self.post_data)
+        if diff_ != 0:
+            self.logger.critical(f'diff pre_pare_data - self.post_data {diff_}')
         if not post.exists():
             Post.objects.create(**pre_pare_data)
         else:
@@ -351,9 +351,22 @@ class Crawler:
                 ef = {}
                 if extra_features is not None:
                     ef = {z['title']: z['value'] if z.get('value') else True for z in extra_features}
-
-        self.post_data = {**self.post_data, **main_item, **ef, }
-        print('********' * 5)
+        # meter = widgets[0]['data']['items'][0]['value']
+        # construction_year = widgets[0]['data']['items'][1]['value']
+        # room = widgets[0]['data']['items'][2]['value']
+        # total_price = widgets[1]['data']['value']
+        # price_per_meter = widgets[2]['data']['value']
+        #
+        # widgets_3 = widgets[3]['data']
+        # real_state_agency_title = widgets_3['value']
+        # real_state_agency_business_ref = widgets_3.get('action', {}).get('payload', {}).get('business_ref',
+        #                                                                                     None)
+        # real_state_agency_slug = widgets_3.get('action', {}).get('payload', {}).get('slug', None)
+        # real_state_agent = widgets[4]['data']['value']
+        # real_state_agent_slug = widgets[4]['data']['action']['payload']['slug']
+        #
+        # ceil = widgets[5]['data']['value'
+        self.post_data = {**self.post_data, **main_item, **ef, **result}
 
 
 class DivarCrawler(Crawler):
