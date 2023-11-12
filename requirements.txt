@@ -8,6 +8,10 @@ requests~=2.31.0
 
 
 fastapi
+django
+sqlalchemy
+pydantic
 requests
 uvicorn
-
+alembic
+django-import-export

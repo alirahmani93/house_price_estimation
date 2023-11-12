@@ -91,7 +91,7 @@ class Crawler:
         state = True
         data = None
         while state:
-            r = requests.get(url, timeout=3)
+            r = requests.get(url, timeout=15)
             if r.status_code == 404:
                 if callback_func:
                     callback_func()
