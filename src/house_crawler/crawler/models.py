@@ -33,6 +33,9 @@ class PostToken(BaseModel):
 
     objects = PostTokenManager()
 
+    def __str__(self):
+        return self.code
+
 
 class Post(BaseModel):
     objects = PostManager()
@@ -93,6 +96,9 @@ class Post(BaseModel):
     not_balcony = models.CharField(max_length=255, null=True, blank=True)
     check_cost_limit = models.CharField(max_length=255, null=True, blank=True)
     pricing_cost = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.__class__}: {self.token}"
 
     @classmethod
     def columns_name(cls):

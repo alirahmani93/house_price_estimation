@@ -5,6 +5,8 @@ from functools import partial
 import requests
 from logging import getLogger
 
+import urllib3
+
 from crawler.models import Post, PostToken, City, Category
 
 

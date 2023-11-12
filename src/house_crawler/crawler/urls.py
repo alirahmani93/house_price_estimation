@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import crawl, crawl_new_tokens, crawl_related_tokens,index
+from .views import crawl, crawl_new_tokens, crawl_related_tokens, index
 
 urlpatterns = [
     path('', index, name="index"),
