@@ -106,6 +106,7 @@ class Post(BaseModel):
     real_state_agent = models.CharField(max_length=32, null=True, blank=True)
     year = models.CharField(max_length=32, null=True, blank=True)
     land_meter = models.CharField(max_length=32, null=True, blank=True)
+    house_status = models.CharField(max_length=32, null=True, blank=True)
 
     def __str__(self):
         return f"{self.__class__}: {self.token}"
@@ -177,4 +178,5 @@ class Post(BaseModel):
             'real_state_agency': 'آژانس املاک',
             'real_state_agent': 'مشاور املاک',
             'year': 'ساخت',
+            'house_status': 'وضعیت این ملک',
         }
