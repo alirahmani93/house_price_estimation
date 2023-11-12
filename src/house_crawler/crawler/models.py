@@ -96,6 +96,7 @@ class Post(BaseModel):
     balcony = models.CharField(max_length=255, null=True, blank=True)
     not_balcony = models.CharField(max_length=255, null=True, blank=True)
     check_cost_limit = models.CharField(max_length=255, null=True, blank=True)
+    check_cost = models.CharField(max_length=255, null=True, blank=True)
     pricing_cost = models.CharField(max_length=255, null=True, blank=True)
     meter = models.CharField(max_length=32, null=True, blank=True)
     rooms = models.CharField(max_length=32, null=True, blank=True)
@@ -168,6 +169,7 @@ class Post(BaseModel):
             'balcony': 'بالکن',
             'not_balcony': 'بالکن ندارد',
             'check_cost_limit': 'حدود هزینه کارشناسی',
+            'check_cost': 'هزینه کارشناسی',
             'pricing_cost': 'هزینه قیمت‌گذاری',
             'meter': 'متراژ',
             'land_meter': 'متراژ زمین',
