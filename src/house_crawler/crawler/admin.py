@@ -1,9 +1,10 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 
 from .models import Post, PostToken
 
 
-class Admin(admin.ModelAdmin):
+class Admin(ImportExportModelAdmin, admin.ModelAdmin):
     list_filter = ['is_active', 'created_at']
 
 

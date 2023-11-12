@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'crawler'
+    'crawler',
+    'import_export',
+
 ]
 
 MIDDLEWARE = [
