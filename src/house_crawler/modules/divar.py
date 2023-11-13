@@ -5,7 +5,7 @@ from functools import partial
 import requests
 from logging import getLogger
 
-import urllib3
+from django.db import IntegrityError
 
 from crawler.models import Post, PostToken, City, Category
 
@@ -231,7 +231,11 @@ class Crawler:
         if diff_ != 0:
             self.logger.critical(f'diff pre_pare_data - self.post_data {diff_}')
         if not post.exists():
-            Post.objects.create(**pre_pare_data)
+            try:
+                Post.objects.create(**pre_pare_data)
+            except IntegrityError:
+                self.logger.critical(f'IntegrityError {self._token}')
+
         else:
             post.update(**pre_pare_data)
 

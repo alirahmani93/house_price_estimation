@@ -79,7 +79,7 @@ class Post(BaseModel):
     image_url = models.CharField(max_length=255, null=True, blank=True)
     web_url = models.CharField(max_length=255, null=True, blank=True)
     unavailable_after = models.CharField(max_length=255, null=True, blank=True)
-    description = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     chat_enabled = models.CharField(max_length=255, null=True, blank=True)
     suggestion_tokens = models.JSONField(null=True, blank=True)
     elevator = models.CharField(max_length=16, null=True, blank=True)
