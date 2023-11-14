@@ -99,7 +99,7 @@ class Cleaner:
         return n
 
 
-if __name__ == '__main__':
-    raw_df = pd.read_csv('../data/Post-2023-11-13.csv')  # ../data/Post-2023-11-13.csv')
-    df = Cleaner(raw_df).transform()
-    print(df.head())
+# if __name__ == '__main__':
+#     raw_df = pd.read_csv('../data/Post-2023-11-13.csv')  # ../data/Post-2023-11-13.csv')
+#     df = Cleaner(raw_df).transform()
+#     print(df.head())
