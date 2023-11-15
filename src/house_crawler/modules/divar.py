@@ -88,10 +88,12 @@ class Crawler:
         return not PostToken.objects.filter(code=token).exists()
 
     def _send_request(self, url, callback_func: Callable = None):  # todo generalize
-        state = True
-        data = None
-        while state:
-            r = requests.get(url, timeout=15)
+        state, data, counter = True, None, 0
+        while state and counter < 4:
+            try:
+                r = requests.get(url, timeout=15)
+            except:
+                counter += 1
             if r.status_code == 404:
                 if callback_func:
                     callback_func()
