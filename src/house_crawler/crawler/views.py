@@ -1,7 +1,12 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.shortcuts import render
+from rest_framework import views
+from rest_framework.permissions import AllowAny, IsAdminUser
 
+from crawler.models import Post
+from crawler.serializers import PostSerializer
+from crawler.throttles import SyncDataRateThrottle
+from modules import divar
 from modules.divar import DivarCrawler
 
 
@@ -70,3 +75,22 @@ def crawl_related_tokens(request, *args, **kwargs):
         'state': True
     }
     return index(request, *args, **result)
+
+
+class BaseView(views.APIView):
+    throttle_classes = [SyncDataRateThrottle]
+    permission_classes = [IsAdminUser]
+
+
+class SyncDataView(BaseView):
+    def get(self, request, *args, **kwargs):
+        response = {'code': 'ok', 'data': {}}
+        from_id: int = request.GET.get('from_id')
+
+        if not from_id:
+            response['code'] = 'not_found'
+            return JsonResponse(response)
+
+        posts = Post.objects.filter(id__gt=from_id)[:1000]
+        response['data'] = PostSerializer(posts, many=True).data
+        return JsonResponse(response)

@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-xbzds%g7&e5zb^jpt-^*4w0_jlm*!&=%hvq)ryhez575k2%%tw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','77.237.73.67']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '77.237.73.67']
 
 # Application definition
 
@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
 
     'crawler',
     'import_export',
@@ -122,3 +124,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'crawler.throttles.SyncDataRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'sync_data': '1/min',
+    }
+}
