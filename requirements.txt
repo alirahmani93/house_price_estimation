@@ -15,3 +15,4 @@ requests
 uvicorn
 alembic
 django-import-export
+djangorestframework
