@@ -5,6 +5,8 @@ python-dotenv==1.0.0
 seaborn
 scikit-learn
 requests~=2.31.0
+geopy
+googletrans
 
 
 fastapi
