@@ -215,7 +215,7 @@ class Cleaner:
             print(loc_name_csv)
             coordinates_df = pd.DataFrame({'loc_name': loc, 'lat': lats, 'long': longs})
             pd.DataFrame({'loc_name': loc_name_csv, 'lats': lats, 'longs': longs}).to_csv(
-                self.csv_district_file_path, )
+                self.csv_district_file_path, index=False)
             print('Here 3')
 
             return coordinates_df
