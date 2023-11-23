@@ -7,7 +7,7 @@ scikit-learn
 requests~=2.31.0
 geopy
 googletrans
-
+xgboost==2.0.2
 
 fastapi
 django
