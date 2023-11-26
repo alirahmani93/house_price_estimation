@@ -36,17 +36,21 @@ class Cleaner:
             'brand_model', 'gender', 'originality', 'status', 'not_elevator', 'not_parking', 'not_depot', 'map_type',
             'latitude', 'balcony', 'total_price', 'created_at', 'real_state_agency',
             'longitude', 'radius', 'map_image_url', 'not_balcony', 'check_cost_limit', 'check_cost', 'pricing_cost',
-            'land_meter', 'house_status', 'category_slug_persian', 'title', 'token_code', 'web_url', 'rent',
+            'land_meter', 'house_status', 'category_slug_persian', 'token_code', 'web_url', 'rent',
             'price_per_meter', 'image_count', 'id', 'token', 'city_name', 'description', 'credit',
             'suggestion_tokens', 'unavailable_after', 'is_active', 'district_persian', 'chat_enabled',
             'city_persian', 'business_ref', 'cat_1', 'cat_2', 'cat_3', 'image_url', 'city', 'category',
         ]
         self.cols_change_to_digits = self.cols_number
         self.drop_na_cols = ['meter', 'floor', 'price']
+
+        # Adel: this column should be removed at the end of pipe_order
+        self.ultimate_drop = ['floor', 'year', 'title', 'loc_name']
+
         self.route = {
             'func_number': self.cols_number, 'func_bool': self.cols_bool, 'func_cols_drop': self.cols_drop,
             'func_need_cat_fill': self.cols_need_to_fill, 'func_floor': ['floor'],
-            'func_drop_na_cols': self.drop_na_cols, 'func_ultimate_drop': ['floor']
+            'func_drop_na_cols': self.drop_na_cols, 'func_ultimate_drop': self.ultimate_drop
         }
         self.pipe_order = [
             'func_cols_drop',
@@ -61,11 +65,10 @@ class Cleaner:
             'func_price_m2',
             'func_age',
             'func_rooms',
-            # 'func_price',
-            'func_ultimate_drop',
-            'func_near_metro']
-
-        self.ultimate_drop = ['floor', 'year']  # Adel: this column should be removed at the end of pipe_order
+            'func_near_metro',
+            # 'func_description',
+        ]
+        self.pipe_order += ['func_ultimate_drop']  # Force func. should be run at the end
 
     def fit(self, X):
         pass
@@ -161,7 +164,8 @@ class Cleaner:
 
     def func_ultimate_drop(self):  # added by Adel
         func_name = 'func_ultimate_drop'
-        self.df = self.df.drop(self.route[func_name], axis=1)
+        for ax in self.route[func_name]:
+            self.df.drop(ax, axis=1, inplace=True)
 
     def func_age(self):  # added by Adel
         self.df.loc[:, 'year'] = self.df['year'].apply(lambda x: 1369 if isinstance(x, str) and 'قبل از' in x else x)
@@ -253,8 +257,65 @@ class Cleaner:
         coordinates_df['if_near'] = coordinates_df.iloc[:, 0].isin(if_near['region']).astype(int)
         return coordinates_df
 
+    def func_description(self):
+        self.df['Contains_teras'] = self.df['title'].str.contains('تراس|بالکن', regex=True)
+        self.df['Contains_komod'] = self.df['title'].str.contains('کمد')
+        self.df['Contains_master'] = self.df['title'].str.contains('مستر')
+        self.df['Contains_kabinet'] = self.df['title'].str.contains('کابینت')
+        self.df['Contains_metro'] = self.df['title'].str.contains('مترو')
+        self.df['Contains_vam'] = self.df['title'].str.contains('وام')
+        self.df['Contains_moshaat'] = self.df['title'].str.contains('مشاعات')
+        self.df['Contains_vahedi'] = self.df['title'].str.contains('واحدی')
+        self.df['Contains_sanad'] = self.df['title'].str.contains('سند')
+        self.df['Contains_noor'] = self.df['title'].str.contains('نور')
+        self.df['Contains_salon'] = self.df['title'].str.contains('سالن')
+        self.df['Contains_labi'] = self.df['title'].str.contains('لابی')
+        self.df['Contains_naghshe'] = self.df['title'].str.contains('نقشه')
+        self.df['Contains_noori'] = self.df['title'].str.contains('نوری')
+        self.df['Contains_material'] = self.df['title'].str.contains('متریال')
+        self.df['Contains_noorgir'] = self.df['title'].str.contains('نورگیر')
+
+        self.df['balcony_total'] = np.where((self.df['balcony'] == True) & (self.df['Contains_teras'] == True),
+                                            True,
+                                            np.where(
+                                                (self.df['balcony'] == True) & (
+                                                        self.df['Contains_teras'] == False),
+                                                True,
+                                                np.where(
+                                                    (self.df['balcony'] == False) & (
+                                                            self.df['Contains_teras'] == True),
+                                                    True,
+                                                    np.where(
+                                                        (self.df['balcony'].isnull()) & (
+                                                                self.df['Contains_teras'] == True),
+                                                        True,
+                                                        np.where((self.df['balcony'].isnull()) & (
+                                                                self.df['Contains_teras'] == False), False,
+                                                                 False)))))
+
+        self.df['noor_total'] = ((self.df['Contains_noor'] == True) & (self.df['Contains_noori'] == False) & (
+                self.df['Contains_noorgir'] == False)) | (
+                                        (self.df['Contains_noor'] == False) & (
+                                        self.df['Contains_noori'] == True) & (
+                                                self.df['Contains_noorgir'] == False)) | (
+                                        (self.df['Contains_noor'] == False) & (
+                                        self.df['Contains_noori'] == False) & (
+                                                self.df['Contains_noorgir'] == True)) | (
+                                        (self.df['Contains_noor'] == True) & (
+                                        self.df['Contains_noori'] == True) & (
+                                                self.df['Contains_noorgir'] == False)) | (
+                                        (self.df['Contains_noor'] == True) & (
+                                        self.df['Contains_noori'] == False) & (
+                                                self.df['Contains_noorgir'] == True)) | (
+                                        (self.df['Contains_noor'] == False) & (
+                                        self.df['Contains_noori'] == True) & (
+                                                self.df['Contains_noorgir'] == True)) | (
+                                        (self.df['Contains_noor'] == True) & (
+                                        self.df['Contains_noori'] == True) & (
+                                                self.df['Contains_noorgir'] == True))
+
 
 if __name__ == '__main__':
-    raw_df = pd.read_csv('../data/Post-2023-11-13.csv')  # ../data/Post-2023-11-13.csv')
+    raw_df = pd.read_csv('../data/Post-2023-11-21.csv')  # ../data/Post-2023-11-13.csv')
     df = Cleaner(raw_df).transform()
     print(df.info())
