@@ -66,6 +66,7 @@ class Cleaner:
             'func_age',
             'func_rooms',
             'func_near_metro',
+            'func_convertor',
             # 'func_description',
         ]
         self.pipe_order += ['func_ultimate_drop']  # Force func. should be run at the end
@@ -313,6 +314,31 @@ class Cleaner:
                                         (self.df['Contains_noor'] == True) & (
                                         self.df['Contains_noori'] == True) & (
                                                 self.df['Contains_noorgir'] == True))
+
+    def func_convertor(self):
+        self.column_convertor(name_of_column='district', n_cut=5, num='pm2_dist_cat')
+
+    def column_convertor(self, name_of_column, n_cut, num):
+        """
+        num: here is for naming different new columns
+        name_of_column: must be in the cleaned_df columns
+        n_cut: number of separation
+        """
+        self.df[f"inrange_{num}"] = pd.cut(self.df["price_m2"], n_cut)
+        classes = self.df.groupby(name_of_column)["price_m2"].mean().sort_values()
+        classes = pd.DataFrame(classes)
+        classes = classes.reset_index()
+        classes["CAT"] = 0
+        for i in range(11):
+            classes.iloc[20 * i: 20 * (i + 1), -1] = i
+        mapping_dict = classes.groupby("CAT")["price_m2"].mean().to_dict()
+        classes["actual_label"] = classes["CAT"].apply(lambda x: mapping_dict[x])
+        temp = classes[[name_of_column, "actual_label"]]
+        ultimate_mapping = temp.set_index(name_of_column).to_dict()["actual_label"]
+        new_col_name = f"new_encoded_{num}"
+        self.df[new_col_name] = self.df[name_of_column].apply(
+            lambda x: ultimate_mapping[x] if not pd.isna(x) else np.nan)
+        return self.df
 
 
 if __name__ == '__main__':
