@@ -9,11 +9,31 @@ import sklearn
 from geopy import Nominatim
 
 import utils
+import requests
+
+
+def get_data(last_data_id: int):
+    response = requests.get('http://77.237.73.67:8003/sync-data', params={"from_id": last_data_id}, timeout=20)
+    if response.status_code == 200:
+        return pd.DataFrame(response.json())
+    elif response.status_code == 429:
+        return None
+    raise ValueError(
+        'sync-data url not responding. Error: code: {0}, msg: {1}'.format(response.status_code, response.content))
 
 
 class Cleaner:
-    def __init__(self, df: pd.DataFrame = None, min_dist=1):
+    def collect_new_data(self):
+        for i in range(self.batch_count):
+            collect_df: pd.DataFrame = get_data(last_data_id=self.raw_df.iloc[-1].id)
+            if collect_df is not None:
+                self.raw_df = pd.concat([self.raw_df, collect_df])
+
+    def __init__(self, df: pd.DataFrame = None, min_dist=1, batch_count: int = 0):
+        self.batch_count = batch_count
         self.raw_df = df
+        self.collect_new_data()
+
         self.df = self.raw_df.copy()
         self.min_dist = min_dist
         self.csv_district_file_path = '../data/districts_location.csv'
