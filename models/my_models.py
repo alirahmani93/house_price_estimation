@@ -19,7 +19,8 @@ from sklearn.svm import SVC
 
 class DivarModel:
     cat_attributes = ['business_type', 'district', 'elevator', 'parking', 'depot', 'real_state_agent', 'if_near',
-                      'inrange_pm2_dist_cat', 'new_encoded_pm2_dist_cat']
+                      'inrange_pm2_dist_cat', 'new_encoded_pm2_dist_cat','Contains_material',
+                      'balcony_total', 'noor_total',]
     ordinal_attributes = ['floor_0', 'rooms']
     num_attributes = ['age', 'meter']
 

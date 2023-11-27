@@ -41,31 +41,22 @@ class Cleaner:
         self.cols_number = ['meter', 'rooms', 'year', ]
         self.cols_bool = ['balcony', 'elevator', 'depot', 'parking']
         self.cols_need_to_fill = ['real_state_agency', 'floor']
-        # self.cols_drop = [
-        #     'city_rel', 'top_description_text', 'middle_description_text', 'bottom_description_text', 'red_text',
-        #     'checkable', 'label', 'label_color', 'is_checked', 'has_chat', 'last_post_date', 'first_post_date',
-        #     'brand_model', 'image_url', 'web_url', 'business_ref', 'chat_enabled', 'cat_1', 'cat_2', 'cat_3',
-        #     'gender', 'originality', 'status', 'not_elevator', 'not_parking', 'not_depot', 'map_type', 'id',
-        #     'is_active', 'radius', 'map_image_url', 'not_balcony', 'check_cost_limit', 'check_cost', 'pricing_cost',
-        #     'land_meter', 'house_status', 'created_at', 'token', 'token_code', 'city_name', 'city_persian', 'credit',
-        #     'image_count', 'category_slug_persian', 'rent','unavailable_after','suggestion_tokens','title','district_persian'
-        # ]
         self.cols_drop = [
             'city_rel', 'top_description_text', 'middle_description_text', 'bottom_description_text', 'red_text',
             'checkable', 'label', 'label_color', 'is_checked', 'has_chat', 'last_post_date', 'first_post_date',
             'brand_model', 'gender', 'originality', 'status', 'not_elevator', 'not_parking', 'not_depot', 'map_type',
-            'latitude', 'balcony', 'total_price', 'created_at', 'real_state_agency',
+            'latitude', 'total_price', 'created_at', 'real_state_agency',
             'longitude', 'radius', 'map_image_url', 'not_balcony', 'check_cost_limit', 'check_cost', 'pricing_cost',
             'land_meter', 'house_status', 'category_slug_persian', 'token_code', 'web_url', 'rent',
             'price_per_meter', 'image_count', 'id', 'token', 'city_name', 'description', 'credit',
             'suggestion_tokens', 'unavailable_after', 'is_active', 'district_persian', 'chat_enabled',
             'city_persian', 'business_ref', 'cat_1', 'cat_2', 'cat_3', 'image_url', 'city', 'category',
-        ]
+        ]  # ,
         self.cols_change_to_digits = self.cols_number
         self.drop_na_cols = ['meter', 'floor', 'price']
 
         # Adel: this column should be removed at the end of pipe_order
-        self.ultimate_drop = ['floor', 'year', 'title', 'loc_name']
+        self.ultimate_drop = ['floor', 'year', 'title', 'loc_name', 'balcony']
 
         self.route = {
             'func_number': self.cols_number, 'func_bool': self.cols_bool, 'func_cols_drop': self.cols_drop,
@@ -87,7 +78,7 @@ class Cleaner:
             'func_rooms',
             'func_near_metro',
             'func_convertor',
-            # 'func_description',
+            'func_description',
         ]
         self.pipe_order += ['func_ultimate_drop']  # Force func. should be run at the end
 
