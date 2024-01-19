@@ -19,8 +19,8 @@ from sklearn.svm import SVC
 
 class DivarModel:
     cat_attributes = ['business_type', 'district', 'elevator', 'parking', 'depot', 'real_state_agent', 'if_near',
-                      'inrange_pm2_dist_cat', 'new_encoded_pm2_dist_cat','Contains_material',
-                      'balcony_total', 'noor_total',]
+                      'inrange_pm2_dist_cat', 'new_encoded_pm2_dist_cat', 'Contains_material',
+                      'balcony_total', 'noor_total', ]
     ordinal_attributes = ['floor_0', 'rooms']
     num_attributes = ['age', 'meter']
 
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     from preprocess import cleaner
 
     raw_df = pd.read_csv('../data/Post-2023-11-21.csv')
-    housing = cleaner.Cleaner(raw_df, min_dist=2.5, batch_count=1)
+    housing = cleaner.Cleaner(raw_df, min_dist=2.5, batch_count=0)
     model = DivarModel(df=raw_df, cleaner_object=housing, )
     model_prediction = model.transform_fit_predict()
     print(model_prediction)

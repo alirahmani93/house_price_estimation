@@ -356,3 +356,37 @@ if __name__ == '__main__':
     raw_df = pd.read_csv('../data/Post-2023-11-21.csv')  # ../data/Post-2023-11-13.csv')
     df = Cleaner(raw_df).transform()
     print(df.info())
+
+x = {
+    'business_type': 'personal',
+    'district': 'sattarkhan',
+    'elevator': False,
+    'parking': False,
+    'depot': False,
+    'meter': 112,
+    'rooms': 2,
+    'real_state_agent': None,
+    'floor_0': 1,
+    'age': 18,
+    'if_near': False,
+    'inrange_pm2_dist_cat': '(-20416666.283, 4083333256.533]',
+    'new_encoded_pm2_dist_cat': '5.200731e+07',
+    'Contains_teras': False,
+    'Contains_komod': False,
+    'Contains_master': False,
+    'Contains_kabinet': False,
+    'Contains_metro': False,
+    'Contains_vam': False,
+    'Contains_moshaat': False,
+    'Contains_vahedi': False,
+    'Contains_sanad': False,
+    'Contains_noor': True,
+    'Contains_salon': False,
+    'Contains_labi': False,
+    'Contains_naghshe': False,
+    'Contains_noori': True,
+    'Contains_material': True,
+    'Contains_noorgir': True,
+    'balcony_total': True,
+    'noor_total': True
+}
